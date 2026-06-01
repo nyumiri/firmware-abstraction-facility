@@ -1,0 +1,16 @@
+{
+  "name": "faf",
+  "displayName": "Firmware Abstraction Facility",
+  "version": "1.0.0",
+  "description": "Hardware-agnostic driver framework featuring a centralized provider-based architecture.",
+  "keywords": ["driver", "framework", "embedded", "architecture"],
+  "authors": {
+    "name": "Alice, aka Nyumi"
+  },
+  "frameworks": ["arduino", "espidf", "stm32cube"],
+  "build": {
+    "includeDir": "include",
+    "srcDir": "src"
+  },
+  "dependencies": {}
+}
