@@ -17,4 +17,12 @@
  * If not, see <https://opensource.org/licenses/MIT>.
  */
 
+#include "FAF/FAF_Driver.h"
+#include "FAF/FAF_DriverDescriptor.h"
+
+#include "FAF/FAF_ProviderConfig.h"
+#include "FAF/FAF_Provider.h"
+
+#include "FAF/FAF_BoardDefinition.h"
+
 #endif // FAF_H

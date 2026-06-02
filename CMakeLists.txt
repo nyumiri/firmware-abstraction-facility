@@ -12,3 +12,21 @@ if(MSVC)
 else()
     add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
+
+add_library(FAF STATIC)
+
+target_include_directories(FAF 
+    PUBLIC 
+    "include"
+)
+
+target_sources(FAF 
+    PRIVATE 
+    "src/infra/FAF_Provider.c"
+)
+
+option(BUILD_TESTS "Build tests" OFF)
+
+if(BUILD_TESTS)
+    add_subdirectory(test)
+endif()
