@@ -17,6 +17,7 @@ extern "C" {
 
 struct faf_driver_instance_t {
     uint32_t signature;
+    const void* config;
 };
 
 struct faf_driver_t {

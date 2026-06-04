@@ -9,6 +9,11 @@ struct FAF_Provider_t {
 
 static FAF_Provider provider = {0};
 
+/*  
+*   I Removed the count "fix" because im getting very trouble 
+*   and the responsability is for the user if ther violate the contract ;)
+*/
+
 void FAF_ProviderInit(FAF_ProviderConfig* config) {
     if (!config) return;
 
@@ -16,18 +21,13 @@ void FAF_ProviderInit(FAF_ProviderConfig* config) {
     self->config = config;
 
     FAF_ProviderConfig* props = self->config;
-    FAF_DriverDescriptor* devices = props->devices;
-    if (!devices || !props->count) return;
+    if (!props->count || !props->devices) return;
 
-    /* FIX: Calculate the actual number of devices on array, i hate dumb users and im dumb */
-    size_t realcount = sizeof(*devices) / sizeof(FAF_DriverDescriptor);
-    if (props->count > realcount) props->count = realcount;
+    for (size_t i = 0; i < props->count; i++) {
+        FAF_DriverDescriptor* driverProps = &props->devices[i];
+        if (!driverProps->constructor || !driverProps->driver) continue;
 
-    for (size_t i = 0; i < config->count; i++) {
-        /* FIX: Im a bullshit, i forget to check if the device is valid and if constructor is valid too */
-        if (!devices[i].constructor || !devices[i].driver) continue;
-
-        devices[i].constructor(devices[i].driver);
+        driverProps->constructor(driverProps->driver);
     }
 }
 

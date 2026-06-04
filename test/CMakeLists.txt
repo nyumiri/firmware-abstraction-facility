@@ -16,7 +16,7 @@ target_sources(provider_t
     PRIVATE 
     main_t.c
     mock/drivers/DummyDriver.c
-    mock/BoardDefinition.c
+    mock/config/CBoard_Valid.c
     units/provider_u/Provider_t.c
 )
 

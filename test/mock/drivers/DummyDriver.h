@@ -11,15 +11,15 @@ extern "C" {
 typedef struct dummy_context_t {
     FAF_Driver_Instance instance;
     int m_dummy;
-} DummyDriverInstance;
+} DummyDriver_Instance;
 
 typedef struct dummy_driver_t {
     FAF_Driver base;
 
     void (*dummy)(FAF_Driver* self);
-} DummyDriverDevice;
+} DummyDriver_Class;
 
-void DummyDriver(FAF_Driver* self);
+void DummyDriver_Constructor(FAF_Driver* self);
 
 int DummyDriver_dummy(FAF_Driver* self);
 
