@@ -3,14 +3,6 @@
 
 #include "FAF/FAF_Driver.h"
 
-#ifdef __cplusplus
-#   include <cstdlib>
-#else
-#   include <stdlib.h>
-#endif
-
-#define ASSERT_SIGNATURE
-
 #define ASSERT_SIGNATURE_EXISTS(TYPE)                                                                           \
     _Static_assert((sizeof(TYPE##_SIGNATURE) > 0), "Driver [" #TYPE "] precisa de assinatura definida");        \
     _Static_assert((TYPE##_SIGNATURE != 0), "Assinatura de driver [" #TYPE "] precisa ser diferente de zero");  \
@@ -56,4 +48,4 @@
         .constructor = className##_Constructor                                  \
     }
 
-#endif
+#endif // FAF_SETUP_INT_H

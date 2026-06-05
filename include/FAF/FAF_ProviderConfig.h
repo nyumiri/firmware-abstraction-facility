@@ -1,5 +1,5 @@
-#ifndef FAF_PROVIDERCONFIG_H
-#define FAF_PROVIDERCONFIG_H
+#ifndef FAF_PROVIDER_CONFIG_H
+#define FAF_PROVIDER_CONFIG_H
 
 #include "FAF/FAF_DriverDescriptor.h"
 
@@ -22,4 +22,4 @@ typedef struct FAF_ProviderConfig_t {
 }
 #endif
 
-#endif // FAF_PROVIDERCONFIG_H
+#endif // FAF_PROVIDER_CONFIG_H

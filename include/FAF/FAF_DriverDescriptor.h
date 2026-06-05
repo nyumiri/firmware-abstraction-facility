@@ -1,5 +1,5 @@
-#ifndef FAF_DRIVERCONFIG_H
-#define FAF_DRIVERCONFIG_H
+#ifndef FAF_DRIVER_DESCRIPTOR_H
+#define FAF_DRIVER_DESCRIPTOR_H
 
 #include "FAF/FAF_Driver.h"
 
@@ -17,4 +17,4 @@ typedef struct FAF_driver_desc_t {
 }
 #endif
 
-#endif // FAF_DRIVERCONFIG_H
+#endif // FAF_DRIVER_DESCRIPTOR_H

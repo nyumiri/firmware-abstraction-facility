@@ -9,16 +9,14 @@ struct FAF_Provider_t {
 
 static FAF_Provider provider = {0};
 
-/*  
-*   I Removed the count "fix" because im getting very trouble 
-*   and the responsability is for the user if ther violate the contract ;)
-*/
-
-void FAF_ProviderInit(FAF_ProviderConfig* config) {
-    if (!config) return;
-
+void FAF_Provider_Provide(FAF_ProviderConfig* config) {
     FAF_Provider* self = &provider;
     self->config = config;
+}
+
+void FAF_Provider_Init() {
+    FAF_Provider* self = &provider;
+    if (!self->config) return;
 
     FAF_ProviderConfig* props = self->config;
     if (!props->count || !props->devices) return;
@@ -31,7 +29,7 @@ void FAF_ProviderInit(FAF_ProviderConfig* config) {
     }
 }
 
-size_t FAF_ProviderSize() {
+size_t FAF_Provider_Size() {
     FAF_Provider* self = &provider;
 
     FAF_ProviderConfig* config = self->config;
@@ -40,7 +38,7 @@ size_t FAF_ProviderSize() {
     return config->count;
 }
 
-FAF_Driver* FAF_ProviderGetDevice(size_t index, uint32_t type_signature) {
+FAF_Driver* FAF_Provider_GetDevice(size_t index, uint32_t type_signature) {
     FAF_Provider* self = &provider;
 
     FAF_ProviderConfig* config = self->config;
@@ -49,7 +47,7 @@ FAF_Driver* FAF_ProviderGetDevice(size_t index, uint32_t type_signature) {
     FAF_DriverDescriptor* devices = config->devices;
     if (!devices) return NULL;
 
-    if (index >= FAF_ProviderSize()) return NULL;
+    if (index >= FAF_Provider_Size()) return NULL;
     
     FAF_Driver* device = devices[index].driver;
     if (!device || (device->signature != type_signature)) return NULL;
@@ -66,7 +64,7 @@ FAF_Driver* FAF_Provider_GetDevice_Internal(size_t index) {
     FAF_DriverDescriptor* devices = config->devices;
     if (!devices) return NULL;
 
-    if (index >= FAF_ProviderSize()) return NULL;
+    if (index >= FAF_Provider_Size()) return NULL;
     
     FAF_Driver* device = devices[index].driver;
     if (!device) return NULL;

@@ -8,4 +8,4 @@
 
 #define GET_PROVIDER_SUPPLY(list_name) &(provider_##list_name##_data)
 
-#endif
+#endif // FAF_SETUP_H

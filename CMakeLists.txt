@@ -23,6 +23,7 @@ target_include_directories(FAF
 target_sources(FAF 
     PRIVATE 
     "src/infra/FAF_Provider.c"
+    "src/infra/FAF_Manager.c"
 )
 
 option(BUILD_TESTS "Build tests" OFF)

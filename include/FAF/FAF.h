@@ -23,4 +23,6 @@
 #include "FAF/FAF_ProviderConfig.h"
 #include "FAF/FAF_Provider.h"
 
+#include "FAF/FAF_Manager.h"
+
 #endif // FAF_H

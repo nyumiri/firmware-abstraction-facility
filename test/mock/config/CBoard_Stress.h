@@ -1,5 +1,5 @@
-#ifndef CBOARD_VALID
-#define CBOARD_VALID
+#ifndef CBOARD_STRESS
+#define CBOARD_STRESS
 
 #include <FAF/FAF_Setup.h>
 
@@ -7,10 +7,10 @@
 extern "C" {
 #endif
 
-DECLARE_PROVIDER_SUPPLY(valid)
+DECLARE_PROVIDER_SUPPLY(stress)
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // CBOARD_VALID
+#endif // CBOARD_STRESS

@@ -3,6 +3,8 @@
 
 #define ANY_SIGNATURE 0xFFFFFFFF
 
+#define DRIVER_SIGNATURE(className) className##_Class_SIGNATURE
+
 #ifdef __cplusplus
 extern "C" {
 #endif

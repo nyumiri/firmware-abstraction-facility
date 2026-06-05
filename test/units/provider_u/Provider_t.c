@@ -10,16 +10,18 @@
 #define MOCK_DRIVER 0
 
 void test_provider_null(void) {
-    FAF_ProviderInit(NULL);
-    TEST_ASSERT_TRUE(FAF_ProviderSize() == 0);
-    TEST_ASSERT_NULL(FAF_ProviderGetDevice(MOCK_DRIVER, DummyDriver_Class_SIGNATURE));
-    TEST_ASSERT_NULL(FAF_ProviderGetDevice(0, DummyDriver_Class_SIGNATURE));
+    FAF_Provider_Provide(NULL);
+    FAF_Provider_Init();
+    TEST_ASSERT_TRUE(FAF_Provider_Size() == 0);
+    TEST_ASSERT_NULL(FAF_Provider_GetDevice(MOCK_DRIVER, DRIVER_SIGNATURE(DummyDriver)));
+    TEST_ASSERT_NULL(FAF_Provider_GetDevice(0, DRIVER_SIGNATURE(DummyDriver)));
 }
 
 void test_provider_valid(void) {
-    FAF_ProviderInit(GET_PROVIDER_SUPPLY(valid));
-    TEST_ASSERT_TRUE(FAF_ProviderSize() == 1);
-    TEST_ASSERT_NOT_NULL(FAF_ProviderGetDevice(MOCK_DRIVER, DummyDriver_Class_SIGNATURE));
-    TEST_ASSERT_NULL(FAF_ProviderGetDevice(99, DummyDriver_Class_SIGNATURE));
-    TEST_ASSERT_NULL(FAF_ProviderGetDevice(MOCK_DRIVER, 0x66554433));
+    FAF_Provider_Provide(GET_PROVIDER_SUPPLY(valid));
+    FAF_Provider_Init();
+    TEST_ASSERT_TRUE(FAF_Provider_Size() == 1);
+    TEST_ASSERT_NOT_NULL(FAF_Provider_GetDevice(MOCK_DRIVER, DRIVER_SIGNATURE(DummyDriver)));
+    TEST_ASSERT_NULL(FAF_Provider_GetDevice(99, DRIVER_SIGNATURE(DummyDriver)));
+    TEST_ASSERT_NULL(FAF_Provider_GetDevice(MOCK_DRIVER, 0x66554433));
 }

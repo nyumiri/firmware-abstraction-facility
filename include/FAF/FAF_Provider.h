@@ -16,10 +16,10 @@ extern "C" {
 #endif
 
 typedef struct FAF_Provider_t FAF_Provider;
-
-void FAF_ProviderInit(FAF_ProviderConfig* config);
-size_t FAF_ProviderSize();
-FAF_Driver* FAF_ProviderGetDevice(size_t index, uint32_t type_signature);
+void FAF_Provider_Provide(FAF_ProviderConfig* config);
+void FAF_Provider_Init();
+size_t FAF_Provider_Size();
+FAF_Driver* FAF_Provider_GetDevice(size_t index, uint32_t type_signature);
 
 #ifdef __cplusplus
 }
