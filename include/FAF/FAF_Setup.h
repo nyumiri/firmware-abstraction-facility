@@ -1,5 +1,5 @@
-#ifndef FAF_H
-#define FAF_H
+#ifndef FAF_SETUP_H
+#define FAF_SETUP_H
 
 /*
  * Firmware Abstraction Facility
@@ -9,12 +9,9 @@
  * See LICENSE file or <https://opensource.org/licenses/MIT> for details.
  */
 
-#include "FAF/FAF_Driver.h"
-#include "FAF/FAF_DriverDescriptor.h"
-
 #include "FAF/FAF_ProviderConfig.h"
-#include "FAF/FAF_Provider.h"
 
-#include "FAF/FAF_Manager.h"
+#define DECLARE_PROVIDER_SUPPLY(list_name)   \
+    extern FAF_ProviderConfig provider_##list_name##_data;
 
-#endif // FAF_H
+#endif // FAF_SETUP_H
