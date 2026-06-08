@@ -1,5 +1,5 @@
-#ifndef FAF_DRIVER_DESCRIPTOR_H
-#define FAF_DRIVER_DESCRIPTOR_H
+#ifndef FAF_CONNECTABLE_H
+#define FAF_CONNECTABLE_H
 
 /*
  * Firmware Abstraction Facility
@@ -15,14 +15,13 @@
 extern "C" {
 #endif
 
-typedef struct FAF_driver_desc_t {
-    FAF_Driver* driver;
-    const char* name;
-    void (*constructor)(FAF_Driver* self);
-} FAF_DriverDescriptor;
+typedef struct iConnectable_t {
+    int (*connect)(FAF_Driver* self);
+    int (*disconnect)(FAF_Driver* self);
+} IConnectable;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // FAF_DRIVER_DESCRIPTOR_H
+#endif // FAF_CONNECTABLE_H

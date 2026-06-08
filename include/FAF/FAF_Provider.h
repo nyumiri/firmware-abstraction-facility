@@ -1,7 +1,17 @@
 #ifndef FAF_PROVIDER_H
 #define FAF_PROVIDER_H
 
+/*
+ * Firmware Abstraction Facility
+ * Copyright (C) 2026 Alice aka Nyumi.
+ *
+ * Released under the MIT License.
+ * See LICENSE file or <https://opensource.org/licenses/MIT> for details.
+ */
+
 #include "FAF/FAF_ProviderConfig.h"
+
+#define GET_PROVIDER_SUPPLY(list_name) &(provider_##list_name##_data)
 
 #ifdef __cplusplus
 #   include <cstddef>

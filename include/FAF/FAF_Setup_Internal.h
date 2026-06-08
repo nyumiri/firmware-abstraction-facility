@@ -1,11 +1,26 @@
 #ifndef FAF_SETUP_ITN_H
 #define FAF_SETUP_INT_H
 
+/*
+ * Firmware Abstraction Facility
+ * Copyright (C) 2026 Alice aka Nyumi.
+ *
+ * Released under the MIT License.
+ * See LICENSE file or <https://opensource.org/licenses/MIT> for details.
+ */
+
 #include "FAF/FAF_Driver.h"
+
+#ifdef __cplusplus
+#   include <cstdlib>
+#else
+#   include <stdlib.h>
+#endif
 
 #define ASSERT_SIGNATURE_EXISTS(TYPE)                                                                           \
     _Static_assert((sizeof(TYPE##_SIGNATURE) > 0), "Driver [" #TYPE "] precisa de assinatura definida");        \
     _Static_assert((TYPE##_SIGNATURE != 0), "Assinatura de driver [" #TYPE "] precisa ser diferente de zero");  \
+    _Static_assert((TYPE##_SIGNATURE != ANY_SIGNATURE), "Assinatura de driver [" #TYPE "] precisa ser diferente de ANY_SIGNATURE");  \
 
 #define DRIVER_LIST_INIT(list_name, ...)                \
     struct list_name##_ty {                             \
@@ -19,17 +34,18 @@
 
 #define DRIVER_LIST_END };
 
-#define DRIVER_LIST_APPEND(list_name, className, var, cfg)                                  \
+#define DRIVER_LIST_APPEND(list_name, className, var, cfg, ...)                             \
     .c_##className##_##var = {                                                              \
-        .base = {                                                                           \
+        .c_parent = {                                                                       \
             .context = (FAF_Driver_Instance*) &(devices_##list_name.i_##className##_##var)  \
         }                                                                                   \
     },                                                                                      \
     .i_##className##_##var = {                                                              \
-        .instance = {                                                                       \
+        .i_parent = {                                                                       \
             .signature = className##_Class_SIGNATURE,                                       \
             .config = ((cfg) == NULL) ? NULL : (cfg)                                        \
-        }                                                                                   \
+        },                                                                                  \
+        __VA_ARGS__                                                                         \
     }
 
 #define PROVIDER_SUPPLY_CREATE(list_name, ...)                                                  \

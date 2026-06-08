@@ -1,5 +1,5 @@
-#ifndef FAF_DRIVER_DESCRIPTOR_H
-#define FAF_DRIVER_DESCRIPTOR_H
+#ifndef FAF_TOGGLEABLE_H
+#define FAF_TOGGLEABLE_H
 
 /*
  * Firmware Abstraction Facility
@@ -15,14 +15,13 @@
 extern "C" {
 #endif
 
-typedef struct FAF_driver_desc_t {
-    FAF_Driver* driver;
-    const char* name;
-    void (*constructor)(FAF_Driver* self);
-} FAF_DriverDescriptor;
+typedef struct iToggleable_t {
+    void (*turn_on)(FAF_Driver* self);
+    void (*turn_off)(FAF_Driver* self);
+} IToggleable;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // FAF_DRIVER_DESCRIPTOR_H
+#endif // FAF_TOGGLEABLE_H

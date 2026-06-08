@@ -21,7 +21,7 @@ void DummyDriver_Constructor(FAF_Driver* self) {
     self->init = idummy_init;
 }
 
-int DummyDriver_dummy(FAF_Driver* self) {
+int DummyDriver_Class_dummy(FAF_Driver* self) {
     if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(DummyDriver))) return -1;
     
     FAF_Driver_Instance* instance = (self->context);

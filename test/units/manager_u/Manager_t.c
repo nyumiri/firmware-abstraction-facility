@@ -23,10 +23,10 @@ static void mock_iterator_dummy(FAF_Driver* driver) {
     printf("Driver Count: %d\n", count);
     printf("Driver Address: %p\n", (void*) driver);
 
-    FAF_Driver* dmy = (FAF_Driver*) FAF_Provider_GetDevice(0, DRIVER_SIGNATURE(DummyDriver));
+    FAF_Driver* dmy = FAF_Provider_GetDevice(0, DRIVER_SIGNATURE(DummyDriver));
     TEST_ASSERT_NOT_NULL(dmy);
-
-    int sixsevenIdiot = DummyDriver_dummy(dmy);
+    int sixsevenIdiot = FAF_DRIVER_CALL(DummyDriver, dummy, dmy);
+    
     printf("Driver Speak: %d\n\n", sixsevenIdiot);
     TEST_ASSERT(sixsevenIdiot == 67);
 }

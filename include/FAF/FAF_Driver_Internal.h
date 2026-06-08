@@ -1,6 +1,14 @@
 #ifndef FAF_DRIVER_ITN_H
 #define FAF_DRIVER_ITN_H
 
+/*
+ * Firmware Abstraction Facility
+ * Copyright (C) 2026 Alice aka Nyumi.
+ *
+ * Released under the MIT License.
+ * See LICENSE file or <https://opensource.org/licenses/MIT> for details.
+ */
+
 #include "FAF/FAF_Driver.h"
 
 #define VALIDATE_DRIVER_SIGNATURE(ctx, sig) ((ctx)->signature == (sig))

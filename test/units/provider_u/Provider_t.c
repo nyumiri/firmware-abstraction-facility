@@ -23,5 +23,6 @@ void test_provider_valid(void) {
     TEST_ASSERT_TRUE(FAF_Provider_Size() == 1);
     TEST_ASSERT_NOT_NULL(FAF_Provider_GetDevice(MOCK_DRIVER, DRIVER_SIGNATURE(DummyDriver)));
     TEST_ASSERT_NULL(FAF_Provider_GetDevice(99, DRIVER_SIGNATURE(DummyDriver)));
+    TEST_ASSERT_NULL(FAF_Provider_GetDevice(-1, DRIVER_SIGNATURE(DummyDriver)));
     TEST_ASSERT_NULL(FAF_Provider_GetDevice(MOCK_DRIVER, 0x66554433));
 }

@@ -7,10 +7,11 @@
   "authors": {
     "name": "Alice, aka Nyumi"
   },
-  "frameworks": ["arduino", "espidf", "stm32cube"],
+  "frameworks": "*",
   "build": {
     "includeDir": "include",
-    "srcDir": "src"
+    "srcDir": "src",
+    "unflags": ["-Wno-old-style-declaration"]
   },
   "dependencies": {}
 }

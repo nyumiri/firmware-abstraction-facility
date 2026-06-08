@@ -9,19 +9,19 @@ extern "C" {
 #endif
 
 typedef struct dummy_context_t {
-    FAF_Driver_Instance instance;
+    FAF_Driver_Instance i_parent;
     int m_dummy;
 } DummyDriver_Instance;
 
 typedef struct dummy_driver_t {
-    FAF_Driver base;
+    FAF_Driver c_parent;
 
     void (*dummy)(FAF_Driver* self);
 } DummyDriver_Class;
 
 void DummyDriver_Constructor(FAF_Driver* self);
 
-int DummyDriver_dummy(FAF_Driver* self);
+int DummyDriver_Class_dummy(FAF_Driver* self);
 
 #ifdef __cplusplus
 }

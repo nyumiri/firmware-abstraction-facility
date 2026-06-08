@@ -1,9 +1,20 @@
 #ifndef FAF_DRIVER_H
 #define FAF_DRIVER_H
 
+/*
+ * Firmware Abstraction Facility
+ * Copyright (C) 2026 Alice aka Nyumi.
+ *
+ * Released under the MIT License.
+ * See LICENSE file or <https://opensource.org/licenses/MIT> for details.
+ */
+
 #define ANY_SIGNATURE 0xFFFFFFFF
 
 #define DRIVER_SIGNATURE(className) className##_Class_SIGNATURE
+
+#define FAF_DRIVER_CALL(class_name, method, ptr, ...) \
+    class_name##_Class_##method(ptr, ##__VA_ARGS__)
 
 #ifdef __cplusplus
 extern "C" {
