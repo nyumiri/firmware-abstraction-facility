@@ -17,4 +17,6 @@
 
 #include "FAF/FAF_Manager.h"
 
+#include "FAF/FAF_Dispatch.h"
+
 #endif // FAF_H

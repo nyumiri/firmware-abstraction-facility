@@ -17,10 +17,14 @@
 extern "C" {
 #endif
 
-void ArduinoLED_Constructor(FAF_Driver* self);
+typedef struct arduino_led_vtableTt {
+    FAF_Driver_VTable v_parent;
 
-void ArduinoLED_Class_Turn_ON(FAF_Driver* self);
-void ArduinoLED_Class_Turn_OFF(FAF_Driver* self);
+    void (*v_Turn_ON)(FAF_Driver* self);
+    void (*v_Turn_OFF)(FAF_Driver* self);
+} ArduinoLED_VTable;
+
+void ArduinoLED_Constructor(FAF_Driver* self);
 
 #ifdef __cplusplus
 }

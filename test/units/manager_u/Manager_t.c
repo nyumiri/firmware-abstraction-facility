@@ -7,8 +7,7 @@
 #include "Manager_t.h"
 
 #include "../../mock/config/CBoard_Stress.h"
-#include "../../mock/drivers/DummyDriver.h"
-#include "../../mock/drivers/DummySignature.h"
+#include "../../mock/drivers/DummyDriver_API.h"
 
 #include <stdio.h>
 
@@ -25,10 +24,10 @@ static void mock_iterator_dummy(FAF_Driver* driver) {
 
     FAF_Driver* dmy = FAF_Provider_GetDevice(0, DRIVER_SIGNATURE(DummyDriver));
     TEST_ASSERT_NOT_NULL(dmy);
-    int sixsevenIdiot = FAF_DRIVER_CALL(DummyDriver, dummy, dmy);
+    int sixsevenIdiot = FAF_CALL_RETURN(DummyDriver, int, dummy, dmy);
     
     printf("Driver Speak: %d\n\n", sixsevenIdiot);
-    TEST_ASSERT(sixsevenIdiot == 67);
+    TEST_ASSERT(sixsevenIdiot == 69);
 }
 
 void test_manager_noData(void) {

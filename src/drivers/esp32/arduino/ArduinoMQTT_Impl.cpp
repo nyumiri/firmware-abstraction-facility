@@ -10,6 +10,130 @@
 #include <WiFiClient.h>
 #include <PubSubClient.h>
 
+/* Vtable Methods */
+
+static void vArduinoMQTT_Connect(FAF_Driver* self, int* out) {
+    if (!self || !out || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return;
+
+    const FAF_Driver_VTable* vt = self->vptr;
+    if (vt->signature != self->signature) return;
+
+    ArduinoMQTT_Class* cls = (ArduinoMQTT_Class*) self;
+    IConnectable* connectable = &cls->c_connectable;
+    if (!connectable->connect) return;
+
+    (*out) = connectable->connect(self);
+}
+
+static void vArduinoMQTT_Disconnect(FAF_Driver* self, int* out) {
+    if (!self || !out || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return;
+
+    const FAF_Driver_VTable* vt = self->vptr;
+    if (vt->signature != self->signature) return;
+
+    ArduinoMQTT_Class* cls = (ArduinoMQTT_Class*) self;
+    IConnectable* connectable = &cls->c_connectable;
+    if (!connectable->disconnect) return;
+
+    (*out) = connectable->disconnect(self);
+}
+
+static void vArduinoMQTT_Publish(FAF_Driver* self, int* out, const char* topic, const char* payload) {
+    if (!self || !out || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return;
+
+    const FAF_Driver_VTable* vt = self->vptr;
+    if (vt->signature != self->signature) return;
+
+    ArduinoMQTT_Class* cls = (ArduinoMQTT_Class*) self;
+    if (!cls->publish) return;
+    
+    (*out) = cls->publish(self, topic, payload);
+}
+
+static void vArduinoMQTT_Subscribe(FAF_Driver* self, int* out, const char* topic) {
+    if (!self || !out || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return;
+
+    const FAF_Driver_VTable* vt = self->vptr;
+    if (vt->signature != self->signature) return;
+
+    ArduinoMQTT_Class* cls = (ArduinoMQTT_Class*) self;
+    if (!cls->subscribe) return;
+    
+    (*out) = cls->subscribe(self, topic);
+}
+
+static void vArduinoMQTT_Listen(FAF_Driver* self) {
+    if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return;
+
+    const FAF_Driver_VTable* vt = self->vptr;
+    if (vt->signature != self->signature) return;
+
+    ArduinoMQTT_Class* cls = (ArduinoMQTT_Class*) self;
+    if (!cls->listen) return;
+    
+    cls->listen(self);
+}
+
+static void vArduinoMQTT_Message_IsReady(FAF_Driver* self, int* out) {
+    if (!self || !out || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return;
+
+    const FAF_Driver_VTable* vt = self->vptr;
+    if (vt->signature != self->signature) return;
+
+    FAF_Driver_Instance* context = self->context;
+    if (!context || !VALIDATE_DRIVER_SIGNATURE(context, DRIVER_SIGNATURE(ArduinoMQTT))) return;
+
+    ArduinoMQTT_Instance* instance = (ArduinoMQTT_Instance*) self->context;
+    
+    (*out) = instance->m_messageBusy;
+}
+
+static void vArduinoMQTT_Message_Read(FAF_Driver* self, FAF_MQTT_Packet* buf) {
+    if (!self || !buf || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return;
+
+    const FAF_Driver_VTable* vt = self->vptr;
+    if (vt->signature != self->signature) return;
+
+    FAF_Driver_Instance* context = self->context;
+    if (!context || !VALIDATE_DRIVER_SIGNATURE(context, DRIVER_SIGNATURE(ArduinoMQTT))) return;
+
+    ArduinoMQTT_Instance* instance = (ArduinoMQTT_Instance*) self->context;
+    FAF_MQTT_Packet* packet = static_cast<FAF_MQTT_Packet*>(instance->m_messagePacket);
+    if (!packet) return;
+
+    memcpy(buf, packet, sizeof(FAF_MQTT_Packet));
+}
+
+static void vArduinoMQTT_Message_Flush(FAF_Driver* self) {
+    if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return;
+
+    const FAF_Driver_VTable* vt = self->vptr;
+    if (vt->signature != self->signature) return;
+
+    FAF_Driver_Instance* context = self->context;
+    if (!context || !VALIDATE_DRIVER_SIGNATURE(context, DRIVER_SIGNATURE(ArduinoMQTT))) return;
+
+    ArduinoMQTT_Instance* instance = (ArduinoMQTT_Instance*) self->context;
+    instance->m_messageBusy = 0;
+}
+
+static const ArduinoMQTT_VTable arduino_mqtt_vtable = {
+    .v_parent = { .signature = DRIVER_SIGNATURE(ArduinoMQTT) },
+
+    .v_Connect = vArduinoMQTT_Connect,
+    .v_Disconnect = vArduinoMQTT_Disconnect,
+
+    .v_Publish = vArduinoMQTT_Publish,
+    .v_Subscribe = vArduinoMQTT_Subscribe,
+    .v_Listen = vArduinoMQTT_Listen,
+
+    .v_Message_IsReady = vArduinoMQTT_Message_IsReady,
+    .v_Message_Read = vArduinoMQTT_Message_Read,
+    .v_Message_Flush = vArduinoMQTT_Message_Flush
+};
+
+/* Internal Stuff */
+
 struct arduino_mqtt_internal_t {
     WiFiClient* m_wifiClient;
     PubSubClient* m_mqttClient;
@@ -217,93 +341,16 @@ static void iArduinoMQTT_dispose(FAF_Driver* self) {
     }
 }
 
+/* Constructor Zone */
+
 void ArduinoMQTT_Constructor(FAF_Driver* self) {
     if (!self) return;
+
+    self->vptr = (const FAF_Driver_VTable*) &arduino_mqtt_vtable;
 
     self->signature = DRIVER_SIGNATURE(ArduinoMQTT);
     self->init = iArduinoMQTT_init;
     self->dispose = iArduinoMQTT_dispose;
-}
-
-int ArduinoMQTT_Class_Connect(FAF_Driver* self) {
-    if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return 0;
-
-    ArduinoMQTT_Class* cls = (ArduinoMQTT_Class*) self;
-    IConnectable* connectable = &cls->c_connectable;
-    if (!connectable->connect) return 0;
-
-    return connectable->connect(self);
-}
-
-int ArduinoMQTT_Class_Disconnect(FAF_Driver* self) {
-    if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return 0;
-
-    ArduinoMQTT_Class* cls = (ArduinoMQTT_Class*) self;
-    IConnectable* connectable = &cls->c_connectable;
-    if (!connectable->disconnect) return 0;
-
-    return connectable->disconnect(self);
-}
-
-int ArduinoMQTT_Class_Publish(FAF_Driver* self, const char* topic, const char* payload) {
-    if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return 0;
-
-    ArduinoMQTT_Class* cls = (ArduinoMQTT_Class*) self;
-    if (!cls->publish) return 0;
-    
-    return cls->publish(self, topic, payload);
-}
-
-int ArduinoMQTT_Class_Subscribe(FAF_Driver* self, const char* topic) {
-    if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return 0;
-
-    ArduinoMQTT_Class* cls = (ArduinoMQTT_Class*) self;
-    if (!cls->subscribe) return 0;
-    
-    return cls->subscribe(self, topic);
-}
-
-void ArduinoMQTT_Class_Listen(FAF_Driver* self) {
-    if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return;
-
-    ArduinoMQTT_Class* cls = (ArduinoMQTT_Class*) self;
-    if (!cls->listen) return;
-    
-    return cls->listen(self);
-}
-
-int ArduinoMQTT_Class_Message_IsReady(FAF_Driver* self) {
-    if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return 0;
-
-    FAF_Driver_Instance* context = self->context;
-    if (!context || !VALIDATE_DRIVER_SIGNATURE(context, DRIVER_SIGNATURE(ArduinoMQTT))) return 0;
-
-    ArduinoMQTT_Instance* instance = (ArduinoMQTT_Instance*) self->context;
-    
-    return instance->m_messageBusy;
-}
-
-void ArduinoMQTT_Class_Message_Read(FAF_Driver* self, FAF_MQTT_Packet* out) {
-    if (!self || !out || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return;
-
-    FAF_Driver_Instance* context = self->context;
-    if (!context || !VALIDATE_DRIVER_SIGNATURE(context, DRIVER_SIGNATURE(ArduinoMQTT))) return;
-
-    ArduinoMQTT_Instance* instance = (ArduinoMQTT_Instance*) self->context;
-    FAF_MQTT_Packet* packet = static_cast<FAF_MQTT_Packet*>(instance->m_messagePacket);
-    if (!packet) return;
-
-    memcpy(out, packet, sizeof(FAF_MQTT_Packet));
-}
-
-void ArduinoMQTT_Class_Message_Flush(FAF_Driver* self) {
-    if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoMQTT))) return;
-
-    FAF_Driver_Instance* context = self->context;
-    if (!context || !VALIDATE_DRIVER_SIGNATURE(context, DRIVER_SIGNATURE(ArduinoMQTT))) return;
-
-    ArduinoMQTT_Instance* instance = (ArduinoMQTT_Instance*) self->context;
-    instance->m_messageBusy = 0;
 }
 
 #endif

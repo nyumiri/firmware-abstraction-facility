@@ -28,14 +28,6 @@ struct faf_driver_instance_t {
     const void* config;
 };
 
-struct faf_driver_t {
-    uint32_t signature;
-    FAF_Driver_Instance* context;
-    
-    void (*init)(FAF_Driver* self);
-    void (*dispose)(FAF_Driver* self);
-};
-
 #ifdef __cplusplus
 }
 #endif

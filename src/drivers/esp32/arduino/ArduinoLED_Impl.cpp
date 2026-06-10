@@ -6,6 +6,42 @@
 
 #include <Arduino.h>
 
+/* Vtable Methods */
+
+static void vArduinoLED_Turn_ON(FAF_Driver* self) {
+    if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoLED))) return;
+
+    const FAF_Driver_VTable* vt = self->vptr;
+    if (vt->signature != self->signature) return;
+
+    ArduinoLED_Class* cls = (ArduinoLED_Class*) self;
+    IToggleable* toggleable = &cls->c_toggleable;
+    if (!toggleable->turn_on) return;
+
+    toggleable->turn_on(self);
+}
+
+static void vArduinoLED_Turn_OFF(FAF_Driver* self) {
+    if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoLED))) return;
+
+    const FAF_Driver_VTable* vt = self->vptr;
+    if (vt->signature != self->signature) return;
+
+    ArduinoLED_Class* cls = (ArduinoLED_Class*) self;
+    IToggleable* toggleable = &cls->c_toggleable;
+    if (!toggleable->turn_off) return;
+
+    toggleable->turn_off(self);
+}
+
+static const ArduinoLED_VTable arduinoLED_vtable = {
+    .v_parent = { .signature = DRIVER_SIGNATURE(ArduinoLED) },
+    .v_Turn_ON = vArduinoLED_Turn_ON,
+    .v_Turn_OFF = vArduinoLED_Turn_OFF
+};
+
+/* Internal Methods */
+
 static void iArduinoLED_turn_on(FAF_Driver* self) {
     if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoLED))) return;
 
@@ -52,31 +88,15 @@ static void iArduinoLED_init(FAF_Driver* self) {
     toggleable->turn_off = iArduinoLED_turn_off;
 }
 
+/* Constructor Zone */
+
 void ArduinoLED_Constructor(FAF_Driver* self) {
     if (!self) return;
 
+    self->vptr = (const FAF_Driver_VTable*) &arduinoLED_vtable;
+
     self->signature = DRIVER_SIGNATURE(ArduinoLED);
     self->init = iArduinoLED_init;
-}
-
-void ArduinoLED_Class_Turn_ON(FAF_Driver* self) {
-    if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoLED))) return;
-
-    ArduinoLED_Class* cls = (ArduinoLED_Class*) self;
-    IToggleable* toggleable = &cls->c_toggleable;
-    if (!toggleable->turn_on) return;
-
-    toggleable->turn_on(self);
-}
-
-void ArduinoLED_Class_Turn_OFF(FAF_Driver* self) {
-    if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoLED))) return;
-
-    ArduinoLED_Class* cls = (ArduinoLED_Class*) self;
-    IToggleable* toggleable = &cls->c_toggleable;
-    if (!toggleable->turn_off) return;
-
-    toggleable->turn_off(self);
 }
 
 #endif

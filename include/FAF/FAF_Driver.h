@@ -10,18 +10,35 @@
  */
 
 #define ANY_SIGNATURE 0xFFFFFFFF
-
 #define DRIVER_SIGNATURE(className) className##_Class_SIGNATURE
 
-#define FAF_DRIVER_CALL(class_name, method, ptr, ...) \
-    class_name##_Class_##method(ptr, ##__VA_ARGS__)
+#define __DRIVER_CALL(T, method, ptr, ...)  \
+    const T##_VTable* vt = (T##_VTable*) (ptr)->vptr; \
+    vt->v_##method((ptr),##__VA_ARGS__);
 
 #ifdef __cplusplus
+#   include <cstdint>
 extern "C" {
+#else
+#   include <stdint.h>
 #endif
 
+typedef struct faf_driver_vtable_t {
+    uint32_t signature;
+} FAF_Driver_VTable;
+
 typedef struct faf_driver_instance_t FAF_Driver_Instance;
+
 typedef struct faf_driver_t FAF_Driver;
+
+struct faf_driver_t {
+    uint32_t signature;
+    const FAF_Driver_VTable* vptr;
+    FAF_Driver_Instance* context;
+    
+    void (*init)(FAF_Driver* self);
+    void (*dispose)(FAF_Driver* self);
+};
 
 #ifdef __cplusplus
 }

@@ -31,12 +31,18 @@ typedef enum wifi_status_e {
     W_EOF
 } WifiStatus;
 
-void ArduinoWifi_Constructor(FAF_Driver* self);
+typedef struct arduino_wifi_vtable_t {
+    FAF_Driver_VTable v_parent;
 
-int ArduinoWifi_Class_Connect(FAF_Driver* self);
-int ArduinoWifi_Class_Disconnect(FAF_Driver* self);
-int ArduinoWifi_Class_Status(FAF_Driver* self);
-void ArduinoWifi_Class_MacAddress(FAF_Driver* self, char* out, uint32_t max_len);
+    void (*v_Connect)(FAF_Driver* self, int* out);
+    void (*v_Disconnect)(FAF_Driver* self, int* out);
+
+    void (*v_Status)(FAF_Driver* self, int* out);
+
+    void (*v_MacAddress)(FAF_Driver* self, char* buf, uint32_t max_len);
+} ArduinoWifi_VTable;
+
+void ArduinoWifi_Constructor(FAF_Driver* self);
 
 #ifdef __cplusplus
 }

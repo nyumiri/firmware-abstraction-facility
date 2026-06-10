@@ -1,6 +1,4 @@
 #include "FAF/FAF_Provider.h"
-
-#include "FAF/FAF_Driver_Internal.h"
 #include "FAF_Provider_Itn.h"
 
 struct FAF_Provider_t {

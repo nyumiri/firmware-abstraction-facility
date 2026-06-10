@@ -1,8 +1,8 @@
 #include <FAF/FAF_Setup_Internal.h>
 #include "CBoard_Stress.h"
 
-#include "../drivers/DummyDriver.h"
-#include "../drivers/DummySignature.h"
+#include "../drivers/DummyDriver_API.h"
+#include "../drivers/DummyDriver_Class.h"
 
 DRIVER_LIST_INIT(stress,
     DRIVER_DECLARE_MEMBER(DummyDriver, d1)

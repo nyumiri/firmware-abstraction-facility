@@ -5,7 +5,7 @@
 #include "Provider_t.h"
 
 #include "../../mock/config/CBoard_Valid.h"
-#include "../../mock/drivers/DummySignature.h"
+#include "../../mock/drivers/DummyDriver_API.h"
 
 #define MOCK_DRIVER 0
 

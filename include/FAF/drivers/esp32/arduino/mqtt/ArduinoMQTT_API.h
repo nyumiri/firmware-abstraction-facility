@@ -18,17 +18,22 @@
 extern "C" {
 #endif
 
+typedef struct arduino_mqtt_vtable_t {
+    FAF_Driver_VTable v_parent;
+
+    void (*v_Connect)(FAF_Driver* self, int* out);
+    void (*v_Disconnect)(FAF_Driver* self, int* out);
+
+    void (*v_Publish)(FAF_Driver* self, int* out, const char* topic, const char* payload);
+    void (*v_Subscribe)(FAF_Driver* self, int* out, const char* topic);
+    void (*v_Listen)(FAF_Driver* self);
+
+    void (*v_Message_IsReady)(FAF_Driver* self, int* out);
+    void (*v_Message_Read)(FAF_Driver* self, FAF_MQTT_Packet* buf);
+    void (*v_Message_Flush)(FAF_Driver* self);
+} ArduinoMQTT_VTable;
+
 void ArduinoMQTT_Constructor(FAF_Driver* self);
-
-int ArduinoMQTT_Class_Connect(FAF_Driver* self);
-int ArduinoMQTT_Class_Disconnect(FAF_Driver* self);
-int ArduinoMQTT_Class_Publish(FAF_Driver* self, const char* topic, const char* payload);
-int ArduinoMQTT_Class_Subscribe(FAF_Driver* self, const char* topic);
-void ArduinoMQTT_Class_Listen(FAF_Driver* self);
-
-int ArduinoMQTT_Class_Message_IsReady(FAF_Driver* self);
-void ArduinoMQTT_Class_Message_Read(FAF_Driver* self, FAF_MQTT_Packet* out);
-void ArduinoMQTT_Class_Message_Flush(FAF_Driver* self);
 
 #ifdef __cplusplus
 }

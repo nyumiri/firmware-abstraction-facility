@@ -55,15 +55,13 @@ Users can extend the library whenever they need to communicate with new devices,
 - [x] DSL for declarative configuration.
 - [x] Core-lib unit tests on Desktop environment.
 - [x] Usage examples.
+- [x] Generic Calls Implemented - Drivers Refactored on New Dispatch System.
 
-> **Status:** v1.0.0 (MVP) Complete.
+> **Status:** v2.0.0 in development.
 
-### Plans for v2.0.0:
+### Plans for v2.0.0 Stable:
 - [ ] Thread-Safety for full RTOS compatibility.
 - [ ] Basic drivers for the native ESP32-IDF platform.
-- [ ] Possible experimental implementation of Generic Calls.
-
-> **NOTE:** The **Generic Calls** implementation may deeply change the library's internal behavior, therefore there is no confirmation whether it will be implemented as a replacement for `FAF_DRIVER_CALL(...)`.
 
 ## License
 The released code is licensed under the MIT license.
