@@ -19,72 +19,6 @@ WifiStatus WTable[] = {
     [WL_DISCONNECTED] = WifiStatus::W_DISCONNECTED
 };
 
-/* Vtable Methods */
-
-static void vArduinoWifi_Connect(FAF_Driver* self, int* out) {
-    if (!self || !out || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoWifi))) return;
-
-    const FAF_Driver_VTable* vt = self->vptr;
-    if (vt->signature != self->signature) return;
-
-    ArduinoWifi_Class* cls = (ArduinoWifi_Class*) self;
-    IConnectable* connectable = &cls->c_connectable;
-    if (!connectable->connect) return;
-
-    (*out) = connectable->connect(self);
-}
-
-static void vArduinoWifi_Disconnect(FAF_Driver* self, int* out) {
-    if (!self || !out || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoWifi))) return;
-
-    const FAF_Driver_VTable* vt = self->vptr;
-    if (vt->signature != self->signature) return;
-
-    ArduinoWifi_Class* cls = (ArduinoWifi_Class*) self;
-    IConnectable* connectable = &cls->c_connectable;
-    if (!connectable->disconnect) return;
-
-    (*out) = connectable->disconnect(self);
-}
-
-static void vArduinoWifi_Status(FAF_Driver* self, int* out) {
-    if (!self || !out || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoWifi))) return;
-
-    const FAF_Driver_VTable* vt = self->vptr;
-    if (vt->signature != self->signature) return;
-
-    ArduinoWifi_Class* cls = (ArduinoWifi_Class*) self;
-    IReportable* reportable = &cls->c_reportable;
-    
-    if (!reportable->status) {
-        (*out) = WifiStatus::W_EOF;
-        return;
-    }
-
-    (*out) = reportable->status(self);
-}
-
-static void vArduinoWifi_MacAddress(FAF_Driver* self, char* buf, uint32_t max_len) {
-    if (!self || !buf || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoWifi))) return;
-
-    const FAF_Driver_VTable* vt = self->vptr;
-    if (vt->signature != self->signature) return;
-    
-    ArduinoWifi_Class* cls = (ArduinoWifi_Class*) self;
-    cls->macAddress(self, buf, max_len);
-}
-
-static const ArduinoWifi_VTable arduino_wifi_vtable = {
-    .v_parent = { .signature = DRIVER_SIGNATURE(ArduinoWifi) },
-    
-    .v_Connect = vArduinoWifi_Connect,
-    .v_Disconnect = vArduinoWifi_Disconnect,
-
-    .v_Status = vArduinoWifi_Status,
-
-    .v_MacAddress = vArduinoWifi_MacAddress
-};
-
 /* Internal Methods */
 
 static int iArduinoWifi_connect(FAF_Driver* self) {
@@ -125,7 +59,9 @@ static void iArduinoWifi_macAddress(FAF_Driver* self, char* out, uint32_t max_le
     out[max_len - 1] = '\0';
 }
 
-static void iArduinoWifi_init(FAF_Driver* self) {
+/* Vtable Methods */
+
+static DECLARE_METHOD void vArduinoWifi_Init(FAF_Driver* self) {
     if (!self || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoWifi))) return;
     
     FAF_Driver_Instance* inst = self->context;
@@ -143,15 +79,80 @@ static void iArduinoWifi_init(FAF_Driver* self) {
     cls->macAddress = iArduinoWifi_macAddress;
 }
 
+static DECLARE_METHOD void vArduinoWifi_Connect(FAF_Driver* self, int* out) {
+    if (!self || !out || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoWifi))) return;
+
+    const FAF_Driver_VTable* vt = self->vptr;
+    if (vt->signature != self->signature) return;
+
+    ArduinoWifi_Class* cls = (ArduinoWifi_Class*) self;
+    IConnectable* connectable = &cls->c_connectable;
+    if (!connectable->connect) return;
+
+    (*out) = connectable->connect(self);
+}
+
+static DECLARE_METHOD void vArduinoWifi_Disconnect(FAF_Driver* self, int* out) {
+    if (!self || !out || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoWifi))) return;
+
+    const FAF_Driver_VTable* vt = self->vptr;
+    if (vt->signature != self->signature) return;
+
+    ArduinoWifi_Class* cls = (ArduinoWifi_Class*) self;
+    IConnectable* connectable = &cls->c_connectable;
+    if (!connectable->disconnect) return;
+
+    (*out) = connectable->disconnect(self);
+}
+
+static DECLARE_METHOD void vArduinoWifi_Status(FAF_Driver* self, int* out) {
+    if (!self || !out || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoWifi))) return;
+
+    const FAF_Driver_VTable* vt = self->vptr;
+    if (vt->signature != self->signature) return;
+
+    ArduinoWifi_Class* cls = (ArduinoWifi_Class*) self;
+    IReportable* reportable = &cls->c_reportable;
+    
+    if (!reportable->status) {
+        (*out) = WifiStatus::W_EOF;
+        return;
+    }
+
+    (*out) = reportable->status(self);
+}
+
+static DECLARE_METHOD void vArduinoWifi_MacAddress(FAF_Driver* self, char* buf, uint32_t max_len) {
+    if (!self || !buf || !VALIDATE_DRIVER_SIGNATURE(self, DRIVER_SIGNATURE(ArduinoWifi))) return;
+
+    const FAF_Driver_VTable* vt = self->vptr;
+    if (vt->signature != self->signature) return;
+    
+    ArduinoWifi_Class* cls = (ArduinoWifi_Class*) self;
+    cls->macAddress(self, buf, max_len);
+}
+
+static DECLARE_VTABLE const ArduinoWifi_VTable arduino_wifi_vtable = {
+    .v_parent = { 
+        .signature = DRIVER_SIGNATURE(ArduinoWifi),
+        .v_init = vArduinoWifi_Init
+    },
+    
+    .v_Connect = vArduinoWifi_Connect,
+    .v_Disconnect = vArduinoWifi_Disconnect,
+
+    .v_Status = vArduinoWifi_Status,
+
+    .v_MacAddress = vArduinoWifi_MacAddress
+};
+
 /* Constructor Zone */
 
 void ArduinoWifi_Constructor(FAF_Driver* self) {
     if (!self) return;
 
     self->vptr = (const FAF_Driver_VTable*) &arduino_wifi_vtable;
-
     self->signature = DRIVER_SIGNATURE(ArduinoWifi);
-    self->init = iArduinoWifi_init;
 }
 
 #endif

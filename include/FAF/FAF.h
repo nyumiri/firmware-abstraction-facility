@@ -19,4 +19,6 @@
 
 #include "FAF/FAF_Dispatch.h"
 
+#include "FAF/FAF_Includes.h"
+
 #endif // FAF_H

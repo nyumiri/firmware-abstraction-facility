@@ -1,6 +1,14 @@
 #ifndef UNIT_TEST_MANAGER_T_H
 #define UNIT_TEST_MANAGER_T_H
 
+/*
+ * Firmware Abstraction Facility
+ * Copyright (C) 2026 Alice aka Nyumi.
+ *
+ * Released under the MIT License.
+ * See LICENSE file or <https://opensource.org/licenses/MIT> for details.
+ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

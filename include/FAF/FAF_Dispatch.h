@@ -12,7 +12,7 @@
 #include "FAF/FAF_Driver.h"
 
 #define FAF_CALL_RETURN(T, R, method, ptr, ...) ({      \
-    R out = 0;                                          \
+    R out = {0};                                        \
     __DRIVER_CALL(T, method, ptr, &out,##__VA_ARGS__)   \
     out;                                                \
 })

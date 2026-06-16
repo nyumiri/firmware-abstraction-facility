@@ -1,5 +1,5 @@
-#ifndef UNIT_TEST_PROVIDER_T_H
-#define UNIT_TEST_PROVIDER_T_H
+#ifndef UNIT_TEST_MEMORY_T_H
+#define UNIT_TEST_MEMORY_T_H
 
 /*
  * Firmware Abstraction Facility
@@ -13,11 +13,11 @@
 extern "C" {
 #endif
 
-void test_provider_null(void);
-void test_provider_valid(void);
+void test_memory_corrupt(void);
+void test_memory_malicious_assigned(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // UNIT_TEST_PROVIDER_T_H
+#endif // UNIT_TEST_MEMORY_T_H

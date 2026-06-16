@@ -30,4 +30,4 @@ typedef struct dummy_driver_t {
 }
 #endif
 
-#endif // FAF_DUMMY_DRIVER_H
+#endif // FAF_DUMMY_DRIVER_CLASS_H

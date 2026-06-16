@@ -20,6 +20,7 @@ target_sources(unit_tests
     mock/config/CBoard_Stress.c
     units/provider_u/Provider_t.c
     units/manager_u/Manager_t.c
+    units/memory_u/Memory_t.c
 )
 
 target_link_libraries(unit_tests 
