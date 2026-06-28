@@ -1,6 +1,5 @@
 SECTIONS {
     .faf.vtable_ptr : {
-        . = ALIGN(16);
         _faf_vtable_ptr_start = .;
         KEEP(*(.faf.vtable_ptr))
         KEEP(*(.faf.vtable_ptr.*))
@@ -11,7 +10,6 @@ INSERT AFTER .flash.rodata;
 
 SECTIONS {
     .faf.vtable_func : {
-        . = ALIGN(16);
         _faf_vtable_func_start = .;
         KEEP(*(.faf.vtable_func.literal))
         KEEP(*(.faf.vtable_func.literal.*))

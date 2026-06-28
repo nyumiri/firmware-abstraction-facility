@@ -13,26 +13,35 @@ add_compile_options(-Wall -Wextra -Wpedantic)
 
 add_library(FAF STATIC)
 
+target_compile_options(FAF PRIVATE -O2)
+
 target_include_directories(FAF 
     PUBLIC 
     "include"
 )
 
-# - ESP32 ARDUINO DRIVERS ------------------------------------------------
+# - FAF Common -----------------------------------------------------------
 
-set(ESP_ARD_SOURCES
-    "src/drivers/esp32/arduino/ArduinoLED_Impl.cpp"
-    "src/drivers/esp32/arduino/ArduinoMQTT_Impl.cpp"
-    "src/drivers/esp32/arduino/ArduinoWifi_Impl.cpp"
+set(FAF_COMMON
+    "src/FAF_Common/FAF_Panic.c"
 )
+
+# - FAF Core Module ------------------------------------------------------
+
+set(FAF_CORE
+    "src/FAF_Core/FAF_Container.c"
+    "src/FAF_Core/FAF_Registry.c"
+)
+
+# - FAF Devices Module ---------------------------------------------------
+
 
 # ------------------------------------------------------------------------
 
 target_sources(FAF 
-    PRIVATE
-    "src/infra/FAF_Provider.c"
-    "src/infra/FAF_Manager.c"
-    ${ESP_ARD_SOURCES}
+    PRIVATE 
+    "${FAF_COMMON}"
+    "${FAF_CORE}"
 )
 
 # - LINKER SETTINGS ------------------------------------------------------
@@ -49,8 +58,12 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
     )
 
 endif()
+
 # ------------------------------------------------------------------------
 
-option(BUILD_TESTS "Build tests" OFF)
+# - Unit Tests -----------------------------------------------------------
 
-add_subdirectory(test)
+add_subdirectory("test/FAF_Core_U")
+
+# ------------------------------------------------------------------------
+
