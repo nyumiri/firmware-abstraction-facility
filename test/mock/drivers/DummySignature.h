@@ -1,6 +1,0 @@
-#ifndef FAF_DUMMY_SIGNATURE_H
-#define FAF_DUMMY_SIGNATURE_H
-
-#define DummyDriver_Class_SIGNATURE 0x64756D6D
-
-#endif // FAF_DUMMY_SIGNATURE_H

@@ -9,34 +9,61 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-if(MSVC)
-    add_compile_options(/W4)
-else()
-    add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
+add_compile_options(-Wall -Wextra -Wpedantic)
 
 add_library(FAF STATIC)
+
+target_compile_options(FAF PRIVATE -O2)
 
 target_include_directories(FAF 
     PUBLIC 
     "include"
 )
 
-# - ESP32 ARDUINO DRIVERS ------------------------------------------------
+# - FAF Common -----------------------------------------------------------
 
-file(GLOB_RECURSE ESP_ARD_SOURCES "src/drivers/esp32/arduino/*.cpp")
+set(FAF_COMMON
+    "src/FAF_Common/FAF_Panic.c"
+)
+
+# - FAF Core Module ------------------------------------------------------
+
+set(FAF_CORE
+    "src/FAF_Core/FAF_Container.c"
+    "src/FAF_Core/FAF_Registry.c"
+)
+
+# - FAF Devices Module ---------------------------------------------------
+
 
 # ------------------------------------------------------------------------
 
 target_sources(FAF 
     PRIVATE 
-    "src/infra/FAF_Provider.c"
-    "src/infra/FAF_Manager.c"
-    ${ESP_ARD_SOURCES}
+    "${FAF_COMMON}"
+    "${FAF_CORE}"
 )
 
-option(BUILD_TESTS "Build tests" OFF)
+# - LINKER SETTINGS ------------------------------------------------------
 
-if(BUILD_TESTS)
-    add_subdirectory(test)
+set(FAF_NATIVE_LINKER 
+    "${CMAKE_CURRENT_SOURCE_DIR}/conf/faf_linker_native.ld"
+)
+
+if (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR 
+    CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+
+    target_link_options(FAF INTERFACE 
+        "LINKER:-T${FAF_NATIVE_LINKER}"
+    )
+
 endif()
+
+# ------------------------------------------------------------------------
+
+# - Unit Tests -----------------------------------------------------------
+
+add_subdirectory("test/FAF_Core_U")
+
+# ------------------------------------------------------------------------
+

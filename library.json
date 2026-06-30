@@ -11,7 +11,8 @@
   "build": {
     "includeDir": "include",
     "srcDir": "src",
-    "unflags": ["-Wno-old-style-declaration"]
+    "unflags": ["-Wno-old-style-declaration"],
+    "extraScript": "apply_linker.py"
   },
   "dependencies": {}
 }
