@@ -56,12 +56,13 @@ Users can extend the library whenever they need to communicate with new devices,
 - [x] Core-lib unit tests on Desktop environment.
 - [x] Usage examples.
 
-> **Status:** v1.0.0 (MVP) Complete.
+> **Status:** v0.0.1a (MVP) Complete.
 
-### Plans for v2.0.0:
+### Future Plains:
+- [ ] Possible experimental implementation of Generic Calls.
+- [ ] Total Refactor on Library Core to Fix Issues and Bottlenecks.
 - [ ] Thread-Safety for full RTOS compatibility.
 - [ ] Basic drivers for the native ESP32-IDF platform.
-- [ ] Possible experimental implementation of Generic Calls.
 
 > **NOTE:** The **Generic Calls** implementation may deeply change the library's internal behavior, therefore there is no confirmation whether it will be implemented as a replacement for `FAF_DRIVER_CALL(...)`.
 
